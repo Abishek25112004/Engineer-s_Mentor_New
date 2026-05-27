@@ -37,26 +37,33 @@ export default function Testimonials() {
   }, []);
 
   useEffect(() => {
+    let ctx;
     const init = async () => {
       const gsapModule = await import('gsap');
       const { ScrollTrigger } = await import('gsap/ScrollTrigger');
       const gsap = gsapModule.default;
       gsap.registerPlugin(ScrollTrigger);
 
-      gsap.from('.testimonial-container', {
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 70%',
-          toggleActions: 'play none none none',
-        },
-        opacity: 0,
-        y: 50,
-        duration: 0.8,
-        ease: 'power3.out',
-      });
+      ctx = gsap.context(() => {
+        gsap.from('.testimonial-container', {
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 70%',
+            toggleActions: 'play none none none',
+          },
+          opacity: 0,
+          y: 50,
+          duration: 0.8,
+          ease: 'power3.out',
+        });
+      }, sectionRef);
     };
 
     init();
+
+    return () => {
+      if (ctx) ctx.revert();
+    };
   }, []);
 
   return (

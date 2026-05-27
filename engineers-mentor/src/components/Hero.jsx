@@ -12,52 +12,60 @@ export default function Hero() {
 
   useEffect(() => {
     setIsLoaded(true);
+    let ctx;
     let gsapModule;
+
     const init = async () => {
       gsapModule = await import('gsap');
       const gsap = gsapModule.default;
 
-      const tl = gsap.timeline({ delay: 2.8 });
+      ctx = gsap.context(() => {
+        const tl = gsap.timeline({ delay: 2.8 });
 
-      tl.from('.hero-subtitle', {
-        opacity: 0,
-        y: 20,
-        duration: 0.8,
-        ease: 'power3.out',
-      })
-        .from('.hero-title-line', {
-          opacity: 0,
-          y: 60,
-          duration: 1,
-          ease: 'power4.out',
-          stagger: 0.15,
-        }, '-=0.4')
-        .from('.hero-description', {
+        tl.from('.hero-subtitle', {
           opacity: 0,
           y: 20,
           duration: 0.8,
           ease: 'power3.out',
-        }, '-=0.4')
-        .from('.hero-buttons', {
-          opacity: 0,
-          y: 30,
-          duration: 0.8,
-          ease: 'power3.out',
-        }, '-=0.3')
-        .from('.hero-scroll-indicator', {
-          opacity: 0,
-          duration: 0.6,
-          ease: 'power2.out',
-        }, '-=0.2')
-        .from('.hero-stats', {
-          opacity: 0,
-          y: 20,
-          duration: 0.6,
-          ease: 'power3.out',
-        }, '-=0.3');
+        })
+          .from('.hero-title-line', {
+            opacity: 0,
+            y: 60,
+            duration: 1,
+            ease: 'power4.out',
+            stagger: 0.15,
+          }, '-=0.4')
+          .from('.hero-description', {
+            opacity: 0,
+            y: 20,
+            duration: 0.8,
+            ease: 'power3.out',
+          }, '-=0.4')
+          .from('.hero-buttons', {
+            opacity: 0,
+            y: 30,
+            duration: 0.8,
+            ease: 'power3.out',
+          }, '-=0.3')
+          .from('.hero-scroll-indicator', {
+            opacity: 0,
+            duration: 0.6,
+            ease: 'power2.out',
+          }, '-=0.2')
+          .from('.hero-stats', {
+            opacity: 0,
+            y: 20,
+            duration: 0.6,
+            ease: 'power3.out',
+          }, '-=0.3');
+      }, heroRef);
     };
 
     init();
+
+    return () => {
+      if (ctx) ctx.revert();
+    };
   }, []);
 
   const scrollTo = (href) => {

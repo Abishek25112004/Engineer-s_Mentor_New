@@ -8,6 +8,7 @@ export default function SectionHeading({ title, subtitle, align = 'center', clas
     const el = headingRef.current;
     if (!el) return;
 
+    let ctx;
     let gsapModule;
     const initAnimation = async () => {
       gsapModule = await import('gsap');
@@ -15,42 +16,48 @@ export default function SectionHeading({ title, subtitle, align = 'center', clas
       const gsap = gsapModule.default;
       gsap.registerPlugin(ScrollTrigger);
 
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: el,
-          start: 'top 85%',
-          toggleActions: 'play none none none',
-        },
-      });
+      ctx = gsap.context(() => {
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: el,
+            start: 'top 85%',
+            toggleActions: 'play none none none',
+          },
+        });
 
-      tl.from(el.querySelector('.section-subtitle'), {
-        opacity: 0,
-        y: 20,
-        duration: 0.6,
-        ease: 'power3.out',
-      })
-        .from(
-          el.querySelector('.section-title'),
-          {
-            opacity: 0,
-            y: 30,
-            duration: 0.8,
-            ease: 'power3.out',
-          },
-          '-=0.3'
-        )
-        .from(
-          el.querySelector('.section-line'),
-          {
-            scaleX: 0,
-            duration: 0.8,
-            ease: 'power3.out',
-          },
-          '-=0.4'
-        );
+        tl.from(el.querySelector('.section-subtitle'), {
+          opacity: 0,
+          y: 20,
+          duration: 0.6,
+          ease: 'power3.out',
+        })
+          .from(
+            el.querySelector('.section-title'),
+            {
+              opacity: 0,
+              y: 30,
+              duration: 0.8,
+              ease: 'power3.out',
+            },
+            '-=0.3'
+          )
+          .from(
+            el.querySelector('.section-line'),
+            {
+              scaleX: 0,
+              duration: 0.8,
+              ease: 'power3.out',
+            },
+            '-=0.4'
+          );
+      }, el);
     };
 
     initAnimation();
+
+    return () => {
+      if (ctx) ctx.revert();
+    };
   }, []);
 
   return (

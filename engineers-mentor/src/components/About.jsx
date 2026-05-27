@@ -39,39 +39,46 @@ export default function About() {
   const sectionRef = useRef(null);
 
   useEffect(() => {
+    let ctx;
     const init = async () => {
       const gsapModule = await import('gsap');
       const { ScrollTrigger } = await import('gsap/ScrollTrigger');
       const gsap = gsapModule.default;
       gsap.registerPlugin(ScrollTrigger);
 
-      gsap.from('.about-card', {
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 70%',
-          toggleActions: 'play none none none',
-        },
-        opacity: 0,
-        y: 50,
-        duration: 0.8,
-        stagger: 0.12,
-        ease: 'power3.out',
-      });
+      ctx = gsap.context(() => {
+        gsap.from('.about-card', {
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 70%',
+            toggleActions: 'play none none none',
+          },
+          opacity: 0,
+          y: 50,
+          duration: 0.8,
+          stagger: 0.12,
+          ease: 'power3.out',
+        });
 
-      gsap.from('.about-highlight', {
-        scrollTrigger: {
-          trigger: '.about-highlight',
-          start: 'top 85%',
-          toggleActions: 'play none none none',
-        },
-        opacity: 0,
-        y: 30,
-        duration: 0.8,
-        ease: 'power3.out',
-      });
+        gsap.from('.about-highlight', {
+          scrollTrigger: {
+            trigger: '.about-highlight',
+            start: 'top 85%',
+            toggleActions: 'play none none none',
+          },
+          opacity: 0,
+          y: 30,
+          duration: 0.8,
+          ease: 'power3.out',
+        });
+      }, sectionRef);
     };
 
     init();
+
+    return () => {
+      if (ctx) ctx.revert();
+    };
   }, []);
 
   return (

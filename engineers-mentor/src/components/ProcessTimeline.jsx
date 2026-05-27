@@ -8,43 +8,50 @@ export default function ProcessTimeline() {
   const lineRef = useRef(null);
 
   useEffect(() => {
+    let ctx;
     const init = async () => {
       const gsapModule = await import('gsap');
       const { ScrollTrigger } = await import('gsap/ScrollTrigger');
       const gsap = gsapModule.default;
       gsap.registerPlugin(ScrollTrigger);
 
-      // Line draw animation
-      if (lineRef.current) {
-        gsap.from(lineRef.current, {
-          scaleY: 0,
-          transformOrigin: 'top',
-          ease: 'none',
+      ctx = gsap.context(() => {
+        // Line draw animation
+        if (lineRef.current) {
+          gsap.from(lineRef.current, {
+            scaleY: 0,
+            transformOrigin: 'top',
+            ease: 'none',
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: 'top 50%',
+              end: 'bottom 70%',
+              scrub: 1,
+            },
+          });
+        }
+
+        // Steps reveal
+        gsap.from('.process-step', {
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: 'top 50%',
-            end: 'bottom 70%',
-            scrub: 1,
+            start: 'top 60%',
+            toggleActions: 'play none none none',
           },
+          opacity: 0,
+          x: (i) => (i % 2 === 0 ? -50 : 50),
+          duration: 0.8,
+          stagger: 0.2,
+          ease: 'power3.out',
         });
-      }
-
-      // Steps reveal
-      gsap.from('.process-step', {
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 60%',
-          toggleActions: 'play none none none',
-        },
-        opacity: 0,
-        x: (i) => (i % 2 === 0 ? -50 : 50),
-        duration: 0.8,
-        stagger: 0.2,
-        ease: 'power3.out',
-      });
+      }, sectionRef);
     };
 
     init();
+
+    return () => {
+      if (ctx) ctx.revert();
+    };
   }, []);
 
   return (
