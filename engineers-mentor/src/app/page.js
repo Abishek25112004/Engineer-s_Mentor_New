@@ -7,7 +7,6 @@ const SmoothScroll = dynamic(() => import('@/components/SmoothScroll'), { ssr: f
 const CustomCursor = dynamic(() => import('@/components/CustomCursor'), { ssr: false });
 const Preloader = dynamic(() => import('@/components/Preloader'), { ssr: false });
 const ScrollProgress = dynamic(() => import('@/components/ScrollProgress'), { ssr: false });
-const WhatsAppButton = dynamic(() => import('@/components/WhatsAppButton'), { ssr: false });
 
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
@@ -59,8 +58,6 @@ export default function Home() {
         <Footer />
       </SmoothScroll>
 
-      {/* WhatsApp floating button */}
-      <WhatsAppButton />
     </>
   );
 }
