@@ -40,12 +40,14 @@ export default function About() {
 
   useEffect(() => {
     let ctx;
+    let isCancelled = false;
     const init = async () => {
       const gsapModule = await import('gsap');
       const { ScrollTrigger } = await import('gsap/ScrollTrigger');
       const gsap = gsapModule.default;
       gsap.registerPlugin(ScrollTrigger);
 
+      if (isCancelled) return;
       ctx = gsap.context(() => {
         gsap.from('.about-card', {
           scrollTrigger: {
@@ -77,6 +79,7 @@ export default function About() {
     init();
 
     return () => {
+      isCancelled = true;
       if (ctx) ctx.revert();
     };
   }, []);

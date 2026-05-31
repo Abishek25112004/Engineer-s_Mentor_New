@@ -81,12 +81,14 @@ export default function WhyChooseMe() {
 
   useEffect(() => {
     let ctx;
+    let isCancelled = false;
     const init = async () => {
       const gsapModule = await import('gsap');
       const { ScrollTrigger } = await import('gsap/ScrollTrigger');
       const gsap = gsapModule.default;
       gsap.registerPlugin(ScrollTrigger);
 
+      if (isCancelled) return;
       ctx = gsap.context(() => {
         gsap.from('.stat-card', {
           scrollTrigger: {
@@ -107,6 +109,7 @@ export default function WhyChooseMe() {
     init();
 
     return () => {
+      isCancelled = true;
       if (ctx) ctx.revert();
     };
   }, []);

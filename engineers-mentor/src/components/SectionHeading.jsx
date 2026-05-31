@@ -9,6 +9,7 @@ export default function SectionHeading({ title, subtitle, align = 'center', clas
     if (!el) return;
 
     let ctx;
+    let isCancelled = false;
     let gsapModule;
     const initAnimation = async () => {
       gsapModule = await import('gsap');
@@ -16,6 +17,7 @@ export default function SectionHeading({ title, subtitle, align = 'center', clas
       const gsap = gsapModule.default;
       gsap.registerPlugin(ScrollTrigger);
 
+      if (isCancelled) return;
       ctx = gsap.context(() => {
         const tl = gsap.timeline({
           scrollTrigger: {
@@ -56,6 +58,7 @@ export default function SectionHeading({ title, subtitle, align = 'center', clas
     initAnimation();
 
     return () => {
+      isCancelled = true;
       if (ctx) ctx.revert();
     };
   }, []);

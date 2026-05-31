@@ -79,32 +79,44 @@ export default function FeaturedProjects() {
   const scrollContainerRef = useRef(null);
 
   useEffect(() => {
+    let ctx;
+    let isCancelled = false;
+
     const init = async () => {
       const gsapModule = await import('gsap');
       const { ScrollTrigger } = await import('gsap/ScrollTrigger');
       const gsap = gsapModule.default;
       gsap.registerPlugin(ScrollTrigger);
 
+      if (isCancelled) return;
+
       const container = scrollContainerRef.current;
       if (!container) return;
 
       const scrollWidth = container.scrollWidth - container.clientWidth;
 
-      gsap.to(container, {
-        scrollLeft: scrollWidth,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 20%',
-          end: `+=${scrollWidth}`,
-          scrub: 1,
-          pin: true,
-          anticipatePin: 1,
-        },
+      ctx = gsap.context(() => {
+        gsap.to(container, {
+          scrollLeft: scrollWidth,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 20%',
+            end: `+=${scrollWidth}`,
+            scrub: 1,
+            pin: true,
+            anticipatePin: 1,
+          },
+        });
       });
     };
 
     init();
+
+    return () => {
+      isCancelled = true;
+      if (ctx) ctx.revert();
+    };
   }, []);
 
   return (

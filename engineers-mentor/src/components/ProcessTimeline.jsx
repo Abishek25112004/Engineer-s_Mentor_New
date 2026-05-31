@@ -9,12 +9,14 @@ export default function ProcessTimeline() {
 
   useEffect(() => {
     let ctx;
+    let isCancelled = false;
     const init = async () => {
       const gsapModule = await import('gsap');
       const { ScrollTrigger } = await import('gsap/ScrollTrigger');
       const gsap = gsapModule.default;
       gsap.registerPlugin(ScrollTrigger);
 
+      if (isCancelled) return;
       ctx = gsap.context(() => {
         // Line draw animation
         if (lineRef.current) {
@@ -50,6 +52,7 @@ export default function ProcessTimeline() {
     init();
 
     return () => {
+      isCancelled = true;
       if (ctx) ctx.revert();
     };
   }, []);

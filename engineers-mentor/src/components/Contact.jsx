@@ -24,12 +24,14 @@ export default function Contact() {
 
   useEffect(() => {
     let ctx;
+    let isCancelled = false;
     const init = async () => {
       const gsapModule = await import('gsap');
       const { ScrollTrigger } = await import('gsap/ScrollTrigger');
       const gsap = gsapModule.default;
       gsap.registerPlugin(ScrollTrigger);
 
+      if (isCancelled) return;
       ctx = gsap.context(() => {
         gsap.from('.contact-form-container', {
           scrollTrigger: {
@@ -61,6 +63,7 @@ export default function Contact() {
     init();
 
     return () => {
+      isCancelled = true;
       if (ctx) ctx.revert();
     };
   }, []);

@@ -38,12 +38,14 @@ export default function Testimonials() {
 
   useEffect(() => {
     let ctx;
+    let isCancelled = false;
     const init = async () => {
       const gsapModule = await import('gsap');
       const { ScrollTrigger } = await import('gsap/ScrollTrigger');
       const gsap = gsapModule.default;
       gsap.registerPlugin(ScrollTrigger);
 
+      if (isCancelled) return;
       ctx = gsap.context(() => {
         gsap.from('.testimonial-container', {
           scrollTrigger: {
@@ -62,6 +64,7 @@ export default function Testimonials() {
     init();
 
     return () => {
+      isCancelled = true;
       if (ctx) ctx.revert();
     };
   }, []);

@@ -13,12 +13,14 @@ export default function Hero() {
   useEffect(() => {
     setIsLoaded(true);
     let ctx;
+    let isCancelled = false;
     let gsapModule;
 
     const init = async () => {
       gsapModule = await import('gsap');
       const gsap = gsapModule.default;
 
+      if (isCancelled) return;
       ctx = gsap.context(() => {
         const tl = gsap.timeline({ delay: 2.8 });
 
@@ -64,6 +66,7 @@ export default function Hero() {
     init();
 
     return () => {
+      isCancelled = true;
       if (ctx) ctx.revert();
     };
   }, []);
