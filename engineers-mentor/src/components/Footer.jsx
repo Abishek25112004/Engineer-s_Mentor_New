@@ -105,7 +105,7 @@ export default function Footer() {
             © {currentYear} Engineer&apos;s Mentor. All rights reserved.
           </p>
           <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
-            Crafted with 💙 for aspiring engineers
+            created by Morpin Technologies
           </p>
           {/* Back to top */}
           <button

@@ -98,7 +98,7 @@ export default function Hero() {
       />
 
       {/* Content */}
-      <div className="relative z-10 container-custom text-center px-4 pt-20 pb-10">
+      <div className="relative z-10 container-custom text-center px-4 pt-36 sm:pt-40 pb-10">
         {/* Subtitle badge */}
         <div className="hero-subtitle inline-flex items-center gap-2 px-4 py-2 rounded-full mb-8"
           style={{
