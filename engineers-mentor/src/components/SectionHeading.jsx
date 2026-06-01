@@ -66,7 +66,7 @@ export default function SectionHeading({ title, subtitle, align = 'center', clas
   return (
     <div
       ref={headingRef}
-      className={`mb-16 md:mb-20 ${align === 'center' ? 'text-center' : 'text-left'} ${className}`}
+      className={`mb-8 md:mb-4 ${align === 'center' ? 'text-center' : 'text-left'} ${className}`}
     >
       {subtitle && (
         <p className="section-subtitle text-sm md:text-base font-medium tracking-[0.2em] uppercase mb-4"
@@ -81,7 +81,7 @@ export default function SectionHeading({ title, subtitle, align = 'center', clas
         {title}
       </h2>
       <div
-        className="section-line mx-auto mt-6 h-[2px] w-20 origin-left"
+        className="section-line mx-auto mt-1 h-[2px] w-20 origin-left"
         style={{
           background: 'linear-gradient(90deg, var(--accent-blue), var(--accent-purple))',
           marginLeft: align === 'center' ? 'auto' : '0',

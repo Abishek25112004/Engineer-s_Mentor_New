@@ -27,7 +27,7 @@ export default function ProcessTimeline() {
             scrollTrigger: {
               trigger: sectionRef.current,
               start: 'top 50%',
-              end: 'bottom 70%',
+              end: 'bottom 75%',
               scrub: 1,
             },
           });
@@ -69,7 +69,7 @@ export default function ProcessTimeline() {
         />
 
         {/* Timeline */}
-        <div className="relative max-w-4xl mx-auto">
+        <div className="relative max-w-5xl mx-auto">
           {/* Center line */}
           <div
             ref={lineRef}
@@ -90,7 +90,7 @@ export default function ProcessTimeline() {
               >
                 {/* Content */}
                 <div className={`flex-1 ${i % 2 === 0 ? 'md:pr-16 md:text-right' : 'md:pl-16 md:text-left'} pl-12 md:pl-0`}>
-                  <div className="glass glass-hover p-6 md:p-8 rounded-2xl transition-all duration-500 hover:translate-y-[-4px] group">
+                  <div className="glass glass-hover px-8 py-4 md:px-10 md:py-5 rounded-2xl transition-all duration-500 hover:translate-y-[-4px] group">
                     <div className="text-3xl mb-3 transition-transform duration-500 group-hover:scale-110">
                       {step.icon}
                     </div>

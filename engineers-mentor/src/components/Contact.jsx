@@ -135,7 +135,7 @@ export default function Contact() {
                   key="success"
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="glass p-12 rounded-2xl text-center"
+                  className="glass px-10 py-8 md:px-14 md:py-10 rounded-2xl text-center"
                 >
                   <div className="text-6xl mb-6">🎉</div>
                   <h3 className="text-2xl font-bold mb-4 text-gradient">Thank You!</h3>
@@ -155,7 +155,7 @@ export default function Contact() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   onSubmit={handleSubmit}
-                  className="glass p-6 md:p-10 rounded-2xl space-y-5"
+                  className="glass px-8 py-6 md:px-12 md:py-10 rounded-2xl space-y-5"
                 >
                   {/* Row: Name + Email */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -290,7 +290,7 @@ export default function Contact() {
           {/* Contact Info */}
           <div className="contact-info lg:col-span-2 space-y-6">
             {/* Info cards */}
-            <div className="glass p-8 rounded-2xl flex flex-col gap-8">
+            <div className="glass px-8 py-6 md:px-10 md:py-8 rounded-2xl flex flex-col gap-8">
               <h3 className="text-lg font-bold" style={{ color: 'var(--text-primary)' }}>
                 Get In Touch
               </h3>
@@ -331,7 +331,7 @@ export default function Contact() {
             </div>
 
             {/* Social Links */}
-            <div className="glass p-6 rounded-2xl">
+            <div className="glass px-8 py-6 md:px-10 md:py-8 rounded-2xl">
               <h3 className="text-sm font-bold mb-4 uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>
                 Follow Us
               </h3>
@@ -394,7 +394,7 @@ export default function Contact() {
             </div>
 
             {/* Response time */}
-            <div className="glass p-6 rounded-2xl text-center">
+            <div className="glass px-8 py-6 md:px-10 md:py-8 rounded-2xl text-center">
               <div className="text-3xl mb-2">⚡</div>
               <p className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>
                 Average response time: <span className="text-gradient font-bold">Under 2 hours</span>

@@ -77,7 +77,7 @@ function DomainCard({ domain, index }) {
         }}
       />
 
-      <div className="relative z-10 p-6 md:p-8">
+      <div className="relative z-10 px-8 py-6 md:px-10 md:py-8">
         {/* Icon */}
         <div className="text-4xl md:text-5xl mb-5 transition-all duration-500 group-hover:scale-125 group-hover:rotate-6">
           {domain.icon}

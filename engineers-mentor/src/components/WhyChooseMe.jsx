@@ -35,7 +35,7 @@ function CounterCard({ stat, isVisible }) {
   }, [isVisible, stat.value]);
 
   return (
-    <div className="group glass glass-hover glow-border p-8 rounded-2xl text-center transition-all duration-500 hover:translate-y-[-4px]">
+    <div className="group glass glass-hover glow-border px-2 py-6 rounded-2xl text-center transition-all duration-500 hover:translate-y-[-4px]">
       {/* Icon */}
       <div className="text-4xl mb-4 transition-transform duration-500 group-hover:scale-125">
         {stat.icon}
@@ -127,7 +127,7 @@ export default function WhyChooseMe() {
           title={<>What Makes Us <span className="text-gradient">Different</span></>}
         />
 
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-8 md:gap-8">
           {stats.map((stat, i) => (
             <div key={i} className="stat-card relative">
               <CounterCard stat={stat} isVisible={isVisible} />

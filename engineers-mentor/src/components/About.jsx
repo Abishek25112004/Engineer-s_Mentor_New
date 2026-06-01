@@ -101,7 +101,7 @@ export default function About() {
           {features.map((feature, i) => (
             <div
               key={i}
-              className="about-card group glass glass-hover glow-border p-8 rounded-2xl transition-all duration-500 hover:translate-y-[-4px]"
+              className="about-card group glass glass-hover glow-border px-8 py-6 md:px-10 md:py-8 rounded-2xl transition-all duration-500 hover:translate-y-[-4px]"
             >
               <div className="text-4xl mb-5 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3">
                 {feature.icon}
@@ -117,7 +117,7 @@ export default function About() {
         </div>
 
         {/* Highlight banner */}
-        <div className="about-highlight mt-16 p-8 md:p-12 rounded-2xl text-center relative overflow-hidden"
+        <div className="about-highlight mt-4 p-8 md:p-12 rounded-2xl text-center relative overflow-hidden"
           style={{
             background: 'linear-gradient(135deg, rgba(0,212,255,0.05), rgba(139,92,246,0.05))',
             border: '1px solid rgba(255,255,255,0.06)',

@@ -91,7 +91,7 @@ export default function Testimonials() {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -20, scale: 0.98 }}
                 transition={{ duration: 0.5, ease: 'easeInOut' }}
-                className="glass p-8 md:p-12 rounded-2xl text-center relative"
+                className="glass px-10 py-8 md:px-14 md:py-10 rounded-2xl text-center relative"
               >
                 {/* Quote icon */}
                 <div className="text-6xl leading-none mb-4 opacity-20" style={{ color: 'var(--accent-blue)' }}>

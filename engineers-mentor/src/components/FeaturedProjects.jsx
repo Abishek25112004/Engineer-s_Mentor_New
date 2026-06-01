@@ -44,7 +44,7 @@ function ProjectCard({ project }) {
       </div>
 
       {/* Content */}
-      <div className="p-6">
+      <div className="px-8 py-6">
         <h3 className="text-lg font-bold mb-2 transition-colors duration-300 group-hover:text-[var(--accent-blue)]"
           style={{ color: 'var(--text-primary)' }}>
           {project.title}
@@ -120,7 +120,7 @@ export default function FeaturedProjects() {
   }, []);
 
   return (
-    <section id="projects" ref={sectionRef} className="section-padding relative overflow-hidden">
+    <section id="projects" ref={sectionRef} className="section-padding relative overflow-hidden" style={{ background: 'var(--bg-primary)', zIndex: 10 }}>
       <div className="container-custom relative z-10">
         <SectionHeading
           subtitle="Our Work"
@@ -131,7 +131,7 @@ export default function FeaturedProjects() {
       {/* Horizontal scroll container */}
       <div
         ref={scrollContainerRef}
-        className="flex gap-6 px-6 md:px-10 overflow-x-auto pb-8 scrollbar-hide"
+        className="flex gap-10 px-8 md:px-12 overflow-x-auto pb-8 scrollbar-hide"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
         {projects.map((project) => (
