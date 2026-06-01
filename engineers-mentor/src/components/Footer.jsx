@@ -104,9 +104,18 @@ export default function Footer() {
           <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
             © {currentYear} Engineer&apos;s Mentor. All rights reserved.
           </p>
-          <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
-            created by Morpin Technologies
-          </p>
+          <div className="text-xs flex items-center" style={{ color: 'var(--text-muted)' }}>
+            <span>created by</span>
+            <a 
+              href="https://morpin.in" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="font-semibold relative group transition-all duration-300 ml-1.5"
+            >
+              <span className="text-gradient group-hover:opacity-80 transition-opacity duration-300">Morpin Technologies</span>
+              <span className="absolute -bottom-0.5 left-0 w-0 h-[1px] bg-gradient-to-r from-blue-500 to-purple-500 group-hover:w-full transition-all duration-300" style={{ background: 'linear-gradient(to right, var(--accent-blue), #a855f7)' }}></span>
+            </a>
+          </div>
           {/* Back to top */}
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
