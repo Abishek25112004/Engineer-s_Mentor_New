@@ -80,7 +80,7 @@ export default function Hero() {
     <section
       ref={heroRef}
       id="hero"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      className="relative min-h-[100dvh] flex flex-col justify-center overflow-hidden pt-32 md:pt-48 pb-10 md:pb-16"
       style={{ background: 'var(--bg-primary)' }}
     >
       {/* Particle Background */}
@@ -98,7 +98,7 @@ export default function Hero() {
       />
 
       {/* Content */}
-      <div className="relative z-10 container-custom text-center px-4 pt-36 sm:pt-40 pb-10">
+      <div className="relative z-10 container-custom text-center px-4 mt-8 md:mt-12">
         {/* Subtitle badge */}
         <div className="hero-subtitle inline-flex items-center gap-2 px-4 py-2 rounded-full mb-8"
           style={{
@@ -112,28 +112,28 @@ export default function Hero() {
         </div>
 
         {/* Main heading */}
-        <h1 className="mb-6" style={{ fontFamily: 'var(--font-heading)' }}>
+        <h1 className="mb-6 md:mb-8" style={{ fontFamily: 'var(--font-heading)' }}>
           <span className="hero-title-line block text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-extrabold leading-[1.1] tracking-tight">
             <span style={{ color: 'var(--text-primary)' }}>Building </span>
             <span className="text-gradient">Final Year</span>
           </span>
-          <span className="hero-title-line block text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-extrabold leading-[1.1] tracking-tight mt-1">
+          <span className="hero-title-line block text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-extrabold leading-[1.1] tracking-tight mt-2">
             <span style={{ color: 'var(--text-primary)' }}>Projects That </span>
             <span className="text-gradient-purple">Stand Out</span>
           </span>
         </h1>
 
         {/* Description */}
-        <p className="hero-description max-w-2xl mx-auto text-base sm:text-lg md:text-xl leading-relaxed mb-10"
+        <p className="hero-description max-w-2xl mx-auto text-base sm:text-lg md:text-xl leading-relaxed mb-10 md:mb-12"
           style={{ color: 'var(--text-secondary)' }}>
           From AI to IoT, Web to Robotics — we deliver premium, fully documented
           engineering projects with expert guidance and end-to-end support.
         </p>
 
         {/* CTA Buttons */}
-        <div className="hero-buttons flex flex-col sm:flex-row items-center justify-center gap-4">
+        <div className="hero-buttons flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-6">
           <MagneticButton
-            className="btn-primary text-base px-8 py-4"
+            className="btn-primary text-base px-8 py-4 w-full sm:w-auto"
             onClick={() => scrollTo('#contact')}
           >
             Start Your Project
@@ -142,7 +142,7 @@ export default function Hero() {
             </svg>
           </MagneticButton>
           <MagneticButton
-            className="btn-outline text-base px-8 py-4"
+            className="btn-outline text-base px-8 py-4 w-full sm:w-auto"
             onClick={() => scrollTo('#domains')}
           >
             View Domains
@@ -153,26 +153,26 @@ export default function Hero() {
         </div>
 
         {/* Quick stats */}
-        <div className="hero-stats flex items-center justify-center gap-8 sm:gap-12 mt-16 flex-wrap">
+        <div className="hero-stats flex items-center justify-center gap-8 sm:gap-16 mt-20 md:mt-24 flex-wrap">
           {[
             { value: '100+', label: 'Projects' },
             { value: '13+', label: 'Domains' },
             { value: '50+', label: 'Colleges' },
           ].map((stat) => (
             <div key={stat.label} className="text-center">
-              <div className="text-2xl sm:text-3xl font-bold text-gradient">{stat.value}</div>
-              <div className="text-xs sm:text-sm mt-1" style={{ color: 'var(--text-muted)' }}>{stat.label}</div>
+              <div className="text-3xl sm:text-4xl font-bold text-gradient mb-1">{stat.value}</div>
+              <div className="text-xs sm:text-sm tracking-wide" style={{ color: 'var(--text-muted)' }}>{stat.label}</div>
             </div>
           ))}
         </div>
 
         {/* Scroll indicator */}
-        <div className="hero-scroll-indicator flex flex-col items-center gap-3 mt-16 sm:mt-24">
-          <span className="text-[10px] tracking-[0.2em] uppercase" style={{ color: 'var(--text-muted)' }}>
+        <div className="hero-scroll-indicator flex flex-col items-center justify-center gap-4 mt-24 md:mt-32">
+          <span className="text-[10px] sm:text-xs tracking-[0.3em] uppercase font-semibold" style={{ color: 'var(--text-muted)' }}>
             Scroll
           </span>
-          <div className="w-[1px] h-20 overflow-hidden" style={{ background: 'rgba(255,255,255,0.1)' }}>
-            <div className="w-full h-full animate-scroll-indicator"
+          <div className="w-[1px] h-24 overflow-hidden relative" style={{ background: 'rgba(255,255,255,0.1)' }}>
+            <div className="w-full h-full animate-scroll-indicator absolute top-0 left-0"
               style={{ background: 'linear-gradient(180deg, var(--accent-blue), transparent)' }} />
           </div>
         </div>
