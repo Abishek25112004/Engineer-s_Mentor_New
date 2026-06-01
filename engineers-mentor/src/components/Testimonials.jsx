@@ -61,6 +61,18 @@ export default function Testimonials() {
     return () => clearInterval(timer);
   }, [testimonialsList.length]);
 
+  // Prevent background scroll when modal is open
+  useEffect(() => {
+    if (showModal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [showModal]);
+
   useEffect(() => {
     let ctx;
     let isCancelled = false;
@@ -268,9 +280,18 @@ export default function Testimonials() {
                       <label className="form-label">Review</label>
                       <textarea required className="form-input min-h-[100px] resize-none" value={formData.text} onChange={(e) => setFormData({...formData, text: e.target.value})}></textarea>
                     </div>
-                    <button type="submit" disabled={isSubmitting} className="btn-primary w-full justify-center mt-2">
-                      {isSubmitting ? 'Submitting...' : 'Submit Review'}
-                    </button>
+                    <div className="flex gap-4 pt-2">
+                      <button 
+                        type="button" 
+                        onClick={() => { setShowModal(false); setFormData({ name: '', college: '', domain: '', rating: 5, text: '' }); }} 
+                        className="btn-outline w-full justify-center"
+                      >
+                        Cancel
+                      </button>
+                      <button type="submit" disabled={isSubmitting} className="btn-primary w-full justify-center">
+                        {isSubmitting ? 'Submitting...' : 'Submit Review'}
+                      </button>
+                    </div>
                   </form>
                 </>
               )}
