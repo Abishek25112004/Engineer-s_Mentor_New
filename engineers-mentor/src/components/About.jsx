@@ -49,30 +49,36 @@ export default function About() {
 
       if (isCancelled) return;
       ctx = gsap.context(() => {
-        gsap.from('.about-card', {
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top 70%',
-            toggleActions: 'play none none none',
-          },
-          opacity: 0,
-          y: 50,
-          duration: 0.8,
-          stagger: 0.12,
-          ease: 'power3.out',
-        });
+        gsap.fromTo('.about-card', 
+          { opacity: 0, y: 50 },
+          {
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: 'top 70%',
+              toggleActions: 'play none none none',
+            },
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            stagger: 0.12,
+            ease: 'power3.out',
+          }
+        );
 
-        gsap.from('.about-highlight', {
-          scrollTrigger: {
-            trigger: '.about-highlight',
-            start: 'top 85%',
-            toggleActions: 'play none none none',
-          },
-          opacity: 0,
-          y: 30,
-          duration: 0.8,
-          ease: 'power3.out',
-        });
+        gsap.fromTo('.about-highlight',
+          { opacity: 0, y: 30 },
+          {
+            scrollTrigger: {
+              trigger: '.about-highlight',
+              start: 'top 85%',
+              toggleActions: 'play none none none',
+            },
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: 'power3.out',
+          }
+        );
       }, sectionRef);
     };
 
