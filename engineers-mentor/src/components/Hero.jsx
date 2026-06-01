@@ -168,11 +168,11 @@ export default function Hero() {
       </div>
 
       {/* Scroll indicator */}
-      <div className="hero-scroll-indicator absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3">
+      <div className="hero-scroll-indicator absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3">
         <span className="text-[10px] tracking-[0.2em] uppercase" style={{ color: 'var(--text-muted)' }}>
           Scroll
         </span>
-        <div className="w-[1px] h-12 overflow-hidden" style={{ background: 'rgba(255,255,255,0.1)' }}>
+        <div className="w-[1px] h-20 overflow-hidden" style={{ background: 'rgba(255,255,255,0.1)' }}>
           <div className="w-full h-full animate-scroll-indicator"
             style={{ background: 'linear-gradient(180deg, var(--accent-blue), transparent)' }} />
         </div>
