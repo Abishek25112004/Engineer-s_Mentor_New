@@ -19,9 +19,6 @@ export const metadata = {
   title: "Engineer's Mentor — Building Final Year Projects That Stand Out",
   description:
     "Premium final year engineering project services across 13+ domains including AI, IoT, Web Development, Cybersecurity, and more. Expert guidance, full documentation, source code, and end-to-end support.",
-  icons: {
-    icon: '/logo.png',
-  },
   keywords: [
     'final year project',
     'engineering project',

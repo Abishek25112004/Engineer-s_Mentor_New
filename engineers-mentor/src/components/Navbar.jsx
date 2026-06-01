@@ -46,8 +46,11 @@ export default function Navbar() {
       >
         <div className="container-custom flex items-center justify-between">
           {/* Logo */}
-          <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="relative z-10 flex items-center">
-            <img src="/logo.png" alt="Engineer's Mentor Logo" className="h-10 md:h-12 w-auto drop-shadow-md" />
+          <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="relative z-10">
+            <span className="text-xl md:text-2xl font-bold tracking-tight">
+              <span className="text-gradient">Engineer&apos;s</span>
+              <span style={{ color: 'var(--text-primary)' }}> Mentor</span>
+            </span>
           </button>
 
           {/* Desktop Links */}
