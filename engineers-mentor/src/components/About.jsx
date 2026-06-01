@@ -120,7 +120,7 @@ export default function About() {
               </p>
             </div>
           ))}
-        </div>
+        </div>  
 
         {/* Highlight banner */}
         <div className="about-highlight mt-4 p-8 md:p-12 rounded-2xl text-center relative overflow-hidden"
