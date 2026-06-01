@@ -25,10 +25,9 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
           {/* Brand */}
           <div>
-            <h3 className="text-2xl font-bold mb-4">
-              <span className="text-gradient">Engineer&apos;s</span>{' '}
-              <span style={{ color: 'var(--text-primary)' }}>Mentor</span>
-            </h3>
+            <div className="mb-4">
+              <img src="/logo.png" alt="Engineer's Mentor Logo" className="h-10 w-auto object-contain" />
+            </div>
             <p className="text-sm leading-relaxed mb-6" style={{ color: 'var(--text-secondary)' }}>
               Your trusted partner for premium final year engineering projects.
               From concept to delivery, we help you stand out.
