@@ -82,12 +82,13 @@ export default function CustomCursor() {
       {/* Dot */}
       <div
         ref={dotRef}
-        className="fixed top-0 left-0 pointer-events-none z-[10000] -translate-x-1/2 -translate-y-1/2 mix-blend-difference"
+        className="fixed top-0 left-0 pointer-events-none z-[10000] -translate-x-1/2 -translate-y-1/2"
         style={{
           width: isHovering ? '8px' : '6px',
           height: isHovering ? '8px' : '6px',
           borderRadius: '50%',
-          background: '#fff',
+          background: 'var(--accent-blue)',
+          boxShadow: '0 0 10px var(--accent-blue)',
           opacity: isVisible ? 1 : 0,
           transition: 'width 0.3s ease, height 0.3s ease, opacity 0.3s ease',
         }}
@@ -100,10 +101,10 @@ export default function CustomCursor() {
           width: isHovering ? '50px' : '36px',
           height: isHovering ? '50px' : '36px',
           borderRadius: '50%',
-          border: `1.5px solid ${isHovering ? 'var(--accent-blue)' : 'rgba(255,255,255,0.4)'}`,
+          border: `1.5px solid ${isHovering ? 'var(--accent-purple)' : 'rgba(255, 107, 0, 0.4)'}`,
+          boxShadow: isHovering ? '0 0 20px rgba(255, 61, 61, 0.3), inset 0 0 10px rgba(255, 61, 61, 0.2)' : '0 0 10px rgba(255, 107, 0, 0.15)',
           opacity: isVisible ? 1 : 0,
-          transition: 'width 0.3s ease, height 0.3s ease, border-color 0.3s ease, opacity 0.3s ease',
-          mixBlendMode: 'difference',
+          transition: 'all 0.3s ease',
         }}
       />
       <style jsx global>{`
