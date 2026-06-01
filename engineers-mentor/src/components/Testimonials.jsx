@@ -212,6 +212,7 @@ export default function Testimonials() {
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 20 }}
               className="glass p-8 md:p-10 rounded-2xl w-full max-w-lg relative max-h-[90vh] overflow-y-auto custom-scrollbar"
+              data-lenis-prevent
             >
               <button 
                 onClick={() => { setShowModal(false); setSubmitSuccess(false); }}
