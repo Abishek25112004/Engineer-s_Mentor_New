@@ -64,3 +64,24 @@ export async function sendEmailNotification(formData) {
     return { success: false, error };
   }
 }
+
+export async function sendReviewEmail(formData) {
+  try {
+    const response = await fetch('/api/review', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to send review email');
+    }
+
+    return { success: true };
+  } catch (error) {
+    console.error('Review Email API Error:', error);
+    return { success: false, error };
+  }
+}

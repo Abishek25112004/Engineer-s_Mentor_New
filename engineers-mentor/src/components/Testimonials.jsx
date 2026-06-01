@@ -3,7 +3,7 @@ import { useRef, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import SectionHeading from './SectionHeading';
 import { testimonials as staticTestimonials } from '@/data/testimonials';
-import { submitToGoogleSheets, fetchTestimonialsFromSheets } from '@/lib/emailService';
+import { submitToGoogleSheets, fetchTestimonialsFromSheets, sendReviewEmail } from '@/lib/emailService';
 import { domains } from '@/data/domains';
 
 function StarRating({ rating }) {
@@ -34,6 +34,7 @@ export default function Testimonials() {
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
+    email: '',
     college: '',
     domain: '',
     rating: 5,
@@ -241,15 +242,20 @@ export default function Testimonials() {
                       e.preventDefault();
                       setIsSubmitting(true);
                       await submitToGoogleSheets(formData, 'testimonial');
+                      await sendReviewEmail(formData);
                       setIsSubmitting(false);
                       setSubmitSuccess(true);
-                      setFormData({ name: '', college: '', domain: '', rating: 5, text: '' });
+                      setFormData({ name: '', email: '', college: '', domain: '', rating: 5, text: '' });
                     }} 
                     className="space-y-4"
                   >
                     <div>
                       <label className="form-label">Full Name</label>
                       <input required type="text" className="form-input" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} />
+                    </div>
+                    <div>
+                      <label className="form-label">Email</label>
+                      <input required type="email" className="form-input" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} />
                     </div>
                     <div>
                       <label className="form-label">College</label>
@@ -283,7 +289,7 @@ export default function Testimonials() {
                     <div className="flex gap-4 pt-2">
                       <button 
                         type="button" 
-                        onClick={() => { setShowModal(false); setFormData({ name: '', college: '', domain: '', rating: 5, text: '' }); }} 
+                        onClick={() => { setShowModal(false); setFormData({ name: '', email: '', college: '', domain: '', rating: 5, text: '' }); }} 
                         className="btn-outline w-full justify-center"
                       >
                         Cancel
