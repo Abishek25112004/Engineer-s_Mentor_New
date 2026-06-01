@@ -98,7 +98,7 @@ export default function Hero() {
       />
 
       {/* Content */}
-      <div className="relative z-10 container-custom text-center px-4 pt-20">
+      <div className="relative z-10 container-custom text-center px-4 pt-20 pb-28">
         {/* Subtitle badge */}
         <div className="hero-subtitle inline-flex items-center gap-2 px-4 py-2 rounded-full mb-8"
           style={{
@@ -168,11 +168,11 @@ export default function Hero() {
       </div>
 
       {/* Scroll indicator */}
-      <div className="hero-scroll-indicator absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
+      <div className="hero-scroll-indicator absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3">
         <span className="text-[10px] tracking-[0.2em] uppercase" style={{ color: 'var(--text-muted)' }}>
           Scroll
         </span>
-        <div className="w-[1px] h-8 overflow-hidden" style={{ background: 'rgba(255,255,255,0.1)' }}>
+        <div className="w-[1px] h-12 overflow-hidden" style={{ background: 'rgba(255,255,255,0.1)' }}>
           <div className="w-full h-full animate-scroll-indicator"
             style={{ background: 'linear-gradient(180deg, var(--accent-blue), transparent)' }} />
         </div>
