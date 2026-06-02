@@ -1,10 +1,6 @@
 import nodemailer from 'nodemailer';
 import { NextResponse } from 'next/server';
-
-// Simple in-memory store for OTP (in a real app, use Redis or DB)
-if (!global.otpStore) {
-  global.otpStore = { code: null, expires: null };
-}
+import { cookies } from 'next/headers';
 
 export async function POST(req) {
   try {
@@ -16,9 +12,7 @@ export async function POST(req) {
 
     // Generate 6 digit OTP
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    global.otpStore.code = otp;
-    global.otpStore.expires = Date.now() + 10 * 60 * 1000; // 10 minutes
-
+    
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
@@ -41,7 +35,18 @@ export async function POST(req) {
 
     await transporter.sendMail(mailOptions);
 
-    return NextResponse.json({ success: true, message: 'OTP sent successfully' });
+    // Set HTTP-only cookie with OTP instead of using global variable which is unreliable in Next.js
+    const response = NextResponse.json({ success: true, message: 'OTP sent successfully' });
+    response.cookies.set({
+      name: 'pending_admin_otp',
+      value: otp,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      path: '/',
+      maxAge: 10 * 60, // 10 minutes
+    });
+
+    return response;
   } catch (error) {
     console.error('Auth error:', error);
     return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 });
