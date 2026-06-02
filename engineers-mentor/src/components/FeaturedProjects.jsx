@@ -4,6 +4,7 @@ import SectionHeading from './SectionHeading';
 import { projects as staticProjects } from '@/data/projects';
 import { fetchProjectsFromSheets } from '@/lib/emailService';
 import { motion, AnimatePresence } from 'framer-motion';
+import gsap from 'gsap';
 
 function getValidImageUrl(url) {
   if (!url) return null;
@@ -102,15 +103,28 @@ export default function FeaturedProjects() {
     loadProjects();
   }, []);
 
-  // Horizontal scroll on mouse wheel over the container
+  // Horizontal scroll on mouse wheel over the container with GSAP for smoothness
   useEffect(() => {
     const container = scrollContainerRef.current;
     if (!container) return;
     
     const onWheel = (e) => {
-      if (e.deltaY !== 0) {
-        e.preventDefault();
-        container.scrollLeft += e.deltaY;
+      // Calculate boundaries
+      const isAtLeft = container.scrollLeft === 0;
+      const isAtRight = Math.ceil(container.scrollLeft + container.clientWidth) >= container.scrollWidth;
+
+      // If scrolling in a valid horizontal direction
+      if ((e.deltaY > 0 && !isAtRight) || (e.deltaY < 0 && !isAtLeft)) {
+        e.preventDefault(); // Stop native vertical scroll
+        e.stopPropagation(); // Stop Lenis from intercepting
+
+        // Smoothly animate scrollLeft using GSAP
+        gsap.to(container, {
+          scrollLeft: container.scrollLeft + (e.deltaY * 2), // Multiply for better sensitivity
+          duration: 0.5,
+          ease: 'power2.out',
+          overwrite: 'auto'
+        });
       }
     };
     
@@ -133,6 +147,7 @@ export default function FeaturedProjects() {
       <div className="relative group">
         <div
           ref={scrollContainerRef}
+          data-lenis-prevent="true"
           className="flex gap-10 px-8 md:px-12 overflow-x-auto pb-8 scrollbar-hide cursor-grab active:cursor-grabbing"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
