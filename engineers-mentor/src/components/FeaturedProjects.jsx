@@ -103,14 +103,14 @@ export default function FeaturedProjects() {
     loadProjects();
   }, []);
 
-  // Horizontal scroll on mouse wheel over the container with GSAP for smoothness
+  // Horizontal scroll on mouse wheel and touch over the container
   useEffect(() => {
     const container = scrollContainerRef.current;
     if (!container) return;
     
     const onWheel = (e) => {
       // Calculate boundaries
-      const isAtLeft = container.scrollLeft === 0;
+      const isAtLeft = container.scrollLeft <= 0;
       const isAtRight = Math.ceil(container.scrollLeft + container.clientWidth) >= container.scrollWidth;
 
       // If scrolling in a valid horizontal direction
@@ -128,8 +128,59 @@ export default function FeaturedProjects() {
       }
     };
     
+    let startY = 0;
+    let startX = 0;
+    let lastY = 0;
+    let isVerticalSwipe = false;
+    let hasDeterminedDirection = false;
+
+    const onTouchStart = (e) => {
+      startY = e.touches[0].clientY;
+      startX = e.touches[0].clientX;
+      lastY = startY;
+      hasDeterminedDirection = false;
+      isVerticalSwipe = false;
+    };
+
+    const onTouchMove = (e) => {
+      const currentY = e.touches[0].clientY;
+      const currentX = e.touches[0].clientX;
+      const deltaY = startY - currentY;
+      const deltaX = startX - currentX;
+      const stepY = lastY - currentY;
+      lastY = currentY;
+
+      if (!hasDeterminedDirection) {
+        // Need a small threshold to accurately determine direction
+        if (Math.abs(deltaY) > 5 || Math.abs(deltaX) > 5) {
+          isVerticalSwipe = Math.abs(deltaY) > Math.abs(deltaX);
+          hasDeterminedDirection = true;
+        }
+      }
+
+      if (isVerticalSwipe) {
+        const isAtLeft = container.scrollLeft <= 0;
+        const isAtRight = Math.ceil(container.scrollLeft + container.clientWidth) >= container.scrollWidth;
+
+        // If scrolling down (stepY > 0) and not at right, OR scrolling up (stepY < 0) and not at left
+        if ((stepY > 0 && !isAtRight) || (stepY < 0 && !isAtLeft)) {
+          e.preventDefault(); // Stop native vertical scroll
+          e.stopPropagation();
+          
+          container.scrollLeft += stepY * 1.5; // Apply manual scroll
+        }
+      }
+    };
+
     container.addEventListener('wheel', onWheel, { passive: false });
-    return () => container.removeEventListener('wheel', onWheel);
+    container.addEventListener('touchstart', onTouchStart, { passive: true });
+    container.addEventListener('touchmove', onTouchMove, { passive: false });
+    
+    return () => {
+      container.removeEventListener('wheel', onWheel);
+      container.removeEventListener('touchstart', onTouchStart);
+      container.removeEventListener('touchmove', onTouchMove);
+    };
   }, []);
 
   const displayProjects = projects.slice(0, 6);
