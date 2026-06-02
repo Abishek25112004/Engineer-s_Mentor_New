@@ -6,9 +6,9 @@ import { googleSheetsUrl } from '@/lib/emailService';
 
 function getValidImageUrl(url) {
   if (!url) return null;
-  const gDriveMatch = url.match(/\/file\/d\/(.+?)\//) || url.match(/\?id=(.+?)(&|$)/);
+  const gDriveMatch = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || url.match(/id=([a-zA-Z0-9_-]+)/);
   if (gDriveMatch && gDriveMatch[1]) {
-    return `https://drive.google.com/uc?export=view&id=${gDriveMatch[1]}`;
+    return `https://drive.google.com/thumbnail?id=${gDriveMatch[1]}&sz=w1000`;
   }
   return url;
 }
@@ -22,14 +22,30 @@ export default function AdminPage() {
   const [error, setError] = useState('');
 
   const [projects, setProjects] = useState([]);
+  
+  // Edit state
+  const [isEditing, setIsEditing] = useState(false);
+  const [editId, setEditId] = useState(null);
+
   const [formData, setFormData] = useState({
     title: '',
-    domain: '',
+    domain: 'AI & Machine Learning',
     description: '',
     techStack: '',
     image: '',
     color: '#8b5cf6',
   });
+
+  const DOMAINS = [
+    'AI & Machine Learning',
+    'Web Development',
+    'Cloud Computing',
+    'Data Science',
+    'Cyber Security',
+    'Mobile App Development',
+    'Internet of Things',
+    'Other'
+  ];
 
   // Since we don't have a check-session API, we'll just optimistically try to load the dashboard.
   // Actually, we can check if document.cookie contains admin_session.
@@ -104,12 +120,14 @@ export default function AdminPage() {
     }
   };
 
-  const handleAddProject = async (e) => {
+  const handleAddOrEditProject = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
       const payload = {
         type: 'project',
+        action: isEditing ? 'edit' : 'add', // We will update the Apps Script to handle this
+        id: editId, // Used only if editing
         timestamp: new Date().toISOString(),
         title: formData.title,
         domain: formData.domain,
@@ -127,10 +145,14 @@ export default function AdminPage() {
         body: JSON.stringify(payload),
       });
 
-      alert('Project added successfully! It will appear after you refresh (and might take a moment to sync from Google Sheets).');
+      alert(isEditing ? 'Project updated successfully!' : 'Project added successfully!');
+      
+      // Reset form
+      setIsEditing(false);
+      setEditId(null);
       setFormData({
         title: '',
-        domain: '',
+        domain: 'AI & Machine Learning',
         description: '',
         techStack: '',
         image: '',
@@ -139,10 +161,25 @@ export default function AdminPage() {
       fetchProjects();
     } catch (err) {
       console.error(err);
-      alert('Error adding project');
+      alert('Error saving project');
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleEditClick = (project) => {
+    setIsEditing(true);
+    setEditId(project.id);
+    setFormData({
+      title: project.title || '',
+      domain: project.domain || 'AI & Machine Learning',
+      description: project.description || '',
+      techStack: Array.isArray(project.techStack) ? project.techStack.join(', ') : project.techStack || '',
+      image: project.image || '',
+      color: project.color || '#8b5cf6',
+    });
+    // Scroll to top to see the form
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   if (step === 'CHECKING') return <div className="min-h-screen flex items-center justify-center bg-[var(--bg-primary)]"><p>Loading...</p></div>;
@@ -198,17 +235,36 @@ export default function AdminPage() {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-              {/* Add Project Form */}
+              {/* Add/Edit Project Form */}
               <div className="glass p-8 rounded-2xl h-fit">
-                <h3 className="text-xl font-bold mb-6">Add New Project</h3>
-                <form onSubmit={handleAddProject} className="space-y-4">
+                <div className="flex justify-between items-center mb-6">
+                  <h3 className="text-xl font-bold">{isEditing ? 'Edit Project' : 'Add New Project'}</h3>
+                  {isEditing && (
+                    <button 
+                      type="button"
+                      onClick={() => {
+                        setIsEditing(false);
+                        setEditId(null);
+                        setFormData({ title: '', domain: 'AI & Machine Learning', description: '', techStack: '', image: '', color: '#8b5cf6' });
+                      }}
+                      className="text-xs text-[var(--accent-blue)] underline"
+                    >
+                      Cancel Edit
+                    </button>
+                  )}
+                </div>
+                <form onSubmit={handleAddOrEditProject} className="space-y-4">
                   <div>
                     <label className="form-label">Project Title</label>
                     <input required type="text" className="form-input" value={formData.title} onChange={(e) => setFormData({...formData, title: e.target.value})} />
                   </div>
                   <div>
                     <label className="form-label">Domain</label>
-                    <input required type="text" className="form-input" placeholder="e.g. AI & Machine Learning" value={formData.domain} onChange={(e) => setFormData({...formData, domain: e.target.value})} />
+                    <select required className="form-input" value={formData.domain} onChange={(e) => setFormData({...formData, domain: e.target.value})}>
+                      {DOMAINS.map(d => (
+                        <option key={d} value={d} className="bg-[var(--bg-primary)]">{d}</option>
+                      ))}
+                    </select>
                   </div>
                   <div>
                     <label className="form-label">Description</label>
@@ -219,15 +275,15 @@ export default function AdminPage() {
                     <input required type="text" className="form-input" placeholder="React, Node.js, Python" value={formData.techStack} onChange={(e) => setFormData({...formData, techStack: e.target.value})} />
                   </div>
                   <div>
-                    <label className="form-label">Image URL / Local Path</label>
-                    <input required type="text" className="form-input" placeholder="/projects/project-1.jpg or https://..." value={formData.image} onChange={(e) => setFormData({...formData, image: e.target.value})} />
+                    <label className="form-label">Image URL (Google Drive links supported)</label>
+                    <input required type="text" className="form-input" placeholder="https://drive.google.com/file/d/..." value={formData.image} onChange={(e) => setFormData({...formData, image: e.target.value})} />
                   </div>
                   <div>
                     <label className="form-label">Accent Color (Hex)</label>
                     <input required type="color" className="w-full h-10 rounded-lg cursor-pointer bg-transparent border border-white/10" value={formData.color} onChange={(e) => setFormData({...formData, color: e.target.value})} />
                   </div>
                   <button type="submit" disabled={loading} className="btn-primary w-full justify-center mt-4">
-                    {loading ? 'Adding...' : 'Add Project to Sheets'}
+                    {loading ? 'Saving...' : (isEditing ? 'Update Project' : 'Add Project to Sheets')}
                   </button>
                 </form>
               </div>
@@ -240,15 +296,23 @@ export default function AdminPage() {
                     <p className="text-gray-400">No projects found. Make sure your Google Sheet has a 'Projects' tab.</p>
                   ) : (
                     projects.map((project, idx) => (
-                      <div key={idx} className="glass p-6 rounded-xl flex gap-4 items-center">
-                        <div className="w-16 h-16 rounded-lg flex-shrink-0" style={{ background: project.color, backgroundImage: `url('${getValidImageUrl(project.image)}')`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
-                        <div>
-                          <h4 className="font-bold text-[var(--text-primary)]">{project.title}</h4>
-                          <p className="text-sm text-[var(--text-muted)]">{project.domain}</p>
-                          <div className="text-xs text-[var(--text-secondary)] mt-1 truncate max-w-[200px] md:max-w-[300px]">
-                            {project.techStack}
+                      <div key={idx} className="glass p-6 rounded-xl flex gap-4 items-center justify-between">
+                        <div className="flex gap-4 items-center overflow-hidden">
+                          <div className="w-16 h-16 rounded-lg flex-shrink-0" style={{ background: project.color, backgroundImage: `url('${getValidImageUrl(project.image)}')`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
+                          <div className="overflow-hidden">
+                            <h4 className="font-bold text-[var(--text-primary)] truncate">{project.title}</h4>
+                            <p className="text-sm text-[var(--text-muted)] truncate">{project.domain}</p>
+                            <div className="text-xs text-[var(--text-secondary)] mt-1 truncate">
+                              {Array.isArray(project.techStack) ? project.techStack.join(', ') : project.techStack}
+                            </div>
                           </div>
                         </div>
+                        <button 
+                          onClick={() => handleEditClick(project)}
+                          className="flex-shrink-0 btn-outline text-xs py-1 px-3"
+                        >
+                          Edit
+                        </button>
                       </div>
                     ))
                   )}

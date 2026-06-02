@@ -6,10 +6,11 @@ import { fetchProjectsFromSheets } from '@/lib/emailService';
 
 function getValidImageUrl(url) {
   if (!url) return null;
-  // Convert standard Google Drive viewing links to direct image links
-  const gDriveMatch = url.match(/\/file\/d\/(.+?)\//) || url.match(/\?id=(.+?)(&|$)/);
+  // Extract ID from standard viewing links or ?id= links
+  const gDriveMatch = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || url.match(/id=([a-zA-Z0-9_-]+)/);
   if (gDriveMatch && gDriveMatch[1]) {
-    return `https://drive.google.com/uc?export=view&id=${gDriveMatch[1]}`;
+    // Using the thumbnail endpoint bypasses strict CORS/redirect issues for background-images
+    return `https://drive.google.com/thumbnail?id=${gDriveMatch[1]}&sz=w1000`;
   }
   return url;
 }
