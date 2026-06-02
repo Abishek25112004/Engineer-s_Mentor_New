@@ -26,7 +26,7 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <div className="mb-4">
-              <img src="/Header Footer Logo.png" alt="Engineer's Mentor Logo" className="h-16 md:h-20 w-auto mix-blend-screen" />
+              <img src="/Header Footer Logo.png" alt="Engineer's Mentor Logo" className="h-20 md:h-24 w-auto mix-blend-screen" />
             </div>
             <p className="text-sm leading-relaxed mb-6" style={{ color: 'var(--text-secondary)' }}>
               Your trusted partner for premium final year engineering projects.
