@@ -38,12 +38,18 @@ export default function AdminPage() {
 
   const DOMAINS = [
     'AI & Machine Learning',
-    'Web Development',
-    'Cloud Computing',
-    'Data Science',
-    'Cyber Security',
-    'Mobile App Development',
     'Internet of Things',
+    'Web Development',
+    'Mobile App Development',
+    'Cybersecurity',
+    'Cloud Computing',
+    'Embedded Systems',
+    'Data Science',
+    'Blockchain',
+    'Robotics',
+    'Electronics',
+    'Mechanical Projects',
+    'Civil Projects',
     'Other'
   ];
 
