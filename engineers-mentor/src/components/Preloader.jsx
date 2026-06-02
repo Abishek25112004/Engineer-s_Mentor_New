@@ -65,9 +65,7 @@ export default function Preloader({ onComplete }) {
       <div className="preloader-content relative z-10 flex flex-col items-center gap-6">
         {/* Logo */}
         <div className="relative">
-          <div className="text-2xl md:text-3xl font-bold tracking-wider text-gradient">
-            ENGINEER&apos;S MENTOR
-          </div>
+          <img src="/Header Footer Logo.png" alt="Engineer's Mentor Logo" className="h-12 md:h-16 w-auto relative z-10" />
           <div className="absolute -inset-4 rounded-full opacity-30 blur-2xl"
             style={{ background: 'linear-gradient(135deg, var(--accent-blue), var(--accent-purple))' }} />
         </div>
