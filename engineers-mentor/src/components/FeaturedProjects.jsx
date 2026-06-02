@@ -131,13 +131,18 @@ export default function FeaturedProjects() {
     let startY = 0;
     let startX = 0;
     let lastY = 0;
+    let lastTime = 0;
+    let velocity = 0;
     let isVerticalSwipe = false;
     let hasDeterminedDirection = false;
 
     const onTouchStart = (e) => {
+      gsap.killTweensOf(container); // Stop any ongoing momentum scroll
       startY = e.touches[0].clientY;
       startX = e.touches[0].clientX;
       lastY = startY;
+      lastTime = e.timeStamp;
+      velocity = 0;
       hasDeterminedDirection = false;
       isVerticalSwipe = false;
     };
@@ -148,7 +153,15 @@ export default function FeaturedProjects() {
       const deltaY = startY - currentY;
       const deltaX = startX - currentX;
       const stepY = lastY - currentY;
+      const currentTime = e.timeStamp;
+      const deltaTime = currentTime - lastTime;
+      
+      if (deltaTime > 0) {
+        velocity = stepY / deltaTime; // pixels per millisecond
+      }
+      
       lastY = currentY;
+      lastTime = currentTime;
 
       if (!hasDeterminedDirection) {
         // Need a small threshold to accurately determine direction
@@ -172,14 +185,33 @@ export default function FeaturedProjects() {
       }
     };
 
+    const onTouchEnd = (e) => {
+      if (!isVerticalSwipe) return;
+
+      // Apply momentum if lifted quickly
+      if (e.timeStamp - lastTime < 100 && Math.abs(velocity) > 0.1) {
+        const momentumDistance = velocity * 400 * 1.5; // Scale distance
+        const momentumDuration = Math.min(1.5, Math.max(0.5, Math.abs(velocity)));
+
+        gsap.to(container, {
+          scrollLeft: container.scrollLeft + momentumDistance,
+          duration: momentumDuration,
+          ease: 'power3.out',
+          overwrite: 'auto'
+        });
+      }
+    };
+
     container.addEventListener('wheel', onWheel, { passive: false });
     container.addEventListener('touchstart', onTouchStart, { passive: true });
     container.addEventListener('touchmove', onTouchMove, { passive: false });
+    container.addEventListener('touchend', onTouchEnd);
     
     return () => {
       container.removeEventListener('wheel', onWheel);
       container.removeEventListener('touchstart', onTouchStart);
       container.removeEventListener('touchmove', onTouchMove);
+      container.removeEventListener('touchend', onTouchEnd);
     };
   }, []);
 
