@@ -44,6 +44,18 @@ export async function fetchTestimonialsFromSheets() {
   }
 }
 
+export async function fetchProjectsFromSheets() {
+  try {
+    const response = await fetch(`${googleSheetsUrl}?type=projects`);
+    if (!response.ok) throw new Error('Network response was not ok');
+    const result = await response.json();
+    return { success: true, data: result.data || [] };
+  } catch (error) {
+    console.error('Fetch Projects Error:', error);
+    return { success: false, data: [], error };
+  }
+}
+
 export async function sendEmailNotification(formData) {
   try {
     const response = await fetch('/api/contact', {

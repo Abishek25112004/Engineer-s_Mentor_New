@@ -1,7 +1,8 @@
 'use client';
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import SectionHeading from './SectionHeading';
-import { projects } from '@/data/projects';
+import { projects as staticProjects } from '@/data/projects';
+import { fetchProjectsFromSheets } from '@/lib/emailService';
 
 function ProjectCard({ project }) {
   return (
@@ -55,7 +56,7 @@ function ProjectCard({ project }) {
 
         {/* Tech stack */}
         <div className="flex flex-wrap gap-2">
-          {project.techStack.map((tech) => (
+          {(typeof project.techStack === 'string' ? project.techStack.split(',').map(s=>s.trim()) : project.techStack).map((tech) => (
             <span
               key={tech}
               className="text-xs px-3 py-1 rounded-full"
@@ -77,6 +78,17 @@ function ProjectCard({ project }) {
 export default function FeaturedProjects() {
   const sectionRef = useRef(null);
   const scrollContainerRef = useRef(null);
+  const [projects, setProjects] = useState(staticProjects);
+
+  useEffect(() => {
+    const loadProjects = async () => {
+      const response = await fetchProjectsFromSheets();
+      if (response.success && response.data.length > 0) {
+        setProjects(response.data);
+      }
+    };
+    loadProjects();
+  }, []);
 
   useEffect(() => {
     let ctx;
@@ -134,8 +146,8 @@ export default function FeaturedProjects() {
         className="flex gap-10 px-8 md:px-12 overflow-x-auto pb-8 scrollbar-hide"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
-        {projects.map((project) => (
-          <ProjectCard key={project.id} project={project} />
+        {projects.map((project, idx) => (
+          <ProjectCard key={project.id || idx} project={project} />
         ))}
       </div>
 
