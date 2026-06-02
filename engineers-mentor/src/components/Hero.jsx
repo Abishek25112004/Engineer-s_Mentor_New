@@ -155,7 +155,7 @@ export default function Hero() {
         {/* Quick stats */}
         <div className="hero-stats flex items-center justify-center gap-8 sm:gap-16 mt-20 md:mt-24 flex-wrap">
           {[
-            { value: '100+', label: 'Projects' },
+            { value: '50+', label: 'Projects' },
             { value: '13+', label: 'Domains' },
             { value: '50+', label: 'Colleges' },
           ].map((stat) => (

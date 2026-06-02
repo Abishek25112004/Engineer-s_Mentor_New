@@ -3,7 +3,7 @@ import { useRef, useEffect, useState } from 'react';
 import SectionHeading from './SectionHeading';
 
 const stats = [
-  { value: 100, suffix: '+', label: 'Projects Delivered', icon: '🚀', color: '#00d4ff' },
+  { value: 50, suffix: '+', label: 'Projects Delivered', icon: '🚀', color: '#00d4ff' },
   { value: 48, suffix: 'h', label: 'Fast Delivery', icon: '⚡', color: '#8b5cf6' },
   { value: 100, suffix: '%', label: 'Full Documentation', icon: '📄', color: '#06b6d4' },
   { value: 100, suffix: '%', label: 'Source Code Included', icon: '💻', color: '#ec4899' },

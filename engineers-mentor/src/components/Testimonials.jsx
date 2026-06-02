@@ -30,6 +30,7 @@ export default function Testimonials() {
   const [current, setCurrent] = useState(0);
   const [testimonialsList, setTestimonialsList] = useState(staticTestimonials);
   const [showModal, setShowModal] = useState(false);
+  const [showViewAllModal, setShowViewAllModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [formData, setFormData] = useState({
@@ -42,6 +43,8 @@ export default function Testimonials() {
   });
   
   const sectionRef = useRef(null);
+
+  const displayTestimonials = testimonialsList.slice(0, 5);
 
   // Fetch testimonials from Google Sheets
   useEffect(() => {
@@ -57,14 +60,14 @@ export default function Testimonials() {
   // Auto-play
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % testimonialsList.length);
+      setCurrent((prev) => (prev + 1) % displayTestimonials.length);
     }, 5000);
     return () => clearInterval(timer);
-  }, [testimonialsList.length]);
+  }, [displayTestimonials.length]);
 
   // Prevent background scroll when modal is open
   useEffect(() => {
-    if (showModal) {
+    if (showModal || showViewAllModal) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
@@ -72,7 +75,7 @@ export default function Testimonials() {
     return () => {
       document.body.style.overflow = '';
     };
-  }, [showModal]);
+  }, [showModal, showViewAllModal]);
 
   useEffect(() => {
     let ctx;
@@ -119,13 +122,21 @@ export default function Testimonials() {
           title={<>What Our <span className="text-gradient">Clients Say</span></>}
         />
         
-        <div className="flex justify-center mb-12">
+        <div className="flex justify-center gap-4 mb-12">
           <button 
             onClick={() => setShowModal(true)}
             className="btn-primary"
           >
             Write a Review
           </button>
+          {testimonialsList.length > 5 && (
+            <button 
+              onClick={() => setShowViewAllModal(true)}
+              className="btn-outline"
+            >
+              View All ({testimonialsList.length})
+            </button>
+          )}
         </div>
 
         <div className="testimonial-container max-w-3xl mx-auto">
@@ -147,12 +158,12 @@ export default function Testimonials() {
 
                 {/* Stars */}
                 <div className="flex justify-center mb-6">
-                  <StarRating rating={testimonialsList[current]?.rating || 5} />
+                  <StarRating rating={displayTestimonials[current]?.rating || 5} />
                 </div>
 
                 {/* Text */}
                 <p className="text-base md:text-lg leading-relaxed mb-8" style={{ color: 'var(--text-secondary)' }}>
-                  {testimonialsList[current]?.text}
+                  {displayTestimonials[current]?.text}
                 </p>
 
                 {/* Author */}
@@ -164,15 +175,20 @@ export default function Testimonials() {
                       color: '#fff',
                     }}
                   >
-                    {testimonialsList[current]?.avatar || testimonialsList[current]?.name?.charAt(0)}
+                    {displayTestimonials[current]?.avatar || displayTestimonials[current]?.name?.charAt(0)}
                   </div>
                   <div className="text-left">
                     <p className="font-bold text-sm" style={{ color: 'var(--text-primary)' }}>
-                      {testimonialsList[current]?.name}
+                      {displayTestimonials[current]?.name}
                     </p>
                     <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
-                      {testimonialsList[current]?.college} {testimonialsList[current]?.domain ? `• ${testimonialsList[current]?.domain}` : ''}
+                      {displayTestimonials[current]?.college} {displayTestimonials[current]?.domain ? `• ${displayTestimonials[current]?.domain}` : ''}
                     </p>
+                    {(displayTestimonials[current]?.date || displayTestimonials[current]?.timestamp) && (
+                      <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>
+                        {new Date(displayTestimonials[current]?.date || displayTestimonials[current]?.timestamp).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}
+                      </p>
+                    )}
                   </div>
                 </div>
               </motion.div>
@@ -181,7 +197,7 @@ export default function Testimonials() {
 
           {/* Dots */}
           <div className="flex justify-center gap-3 mt-8">
-            {testimonialsList.map((_, i) => (
+            {displayTestimonials.map((_, i) => (
               <button
                 key={i}
                 onClick={() => setCurrent(i)}
@@ -302,6 +318,74 @@ export default function Testimonials() {
                   </form>
                 </>
               )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* View All Modal */}
+      <AnimatePresence>
+        {showViewAllModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            style={{ background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(8px)' }}
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              className="glass p-6 md:p-8 rounded-2xl w-full max-w-4xl relative max-h-[90vh] flex flex-col"
+              data-lenis-prevent
+            >
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-2xl font-bold text-gradient">All Reviews</h3>
+                <button 
+                  onClick={() => setShowViewAllModal(false)}
+                  className="text-gray-400 hover:text-white text-xl"
+                >
+                  ✕
+                </button>
+              </div>
+              
+              <div className="overflow-y-auto custom-scrollbar flex-1 pr-2 grid grid-cols-1 md:grid-cols-2 gap-6">
+                {testimonialsList.map((testimonial, idx) => (
+                  <div key={testimonial.id || idx} className="bg-white/5 border border-white/10 p-6 rounded-xl relative">
+                    <div className="flex justify-between items-start mb-4">
+                      <div className="flex items-center gap-3">
+                        <div
+                          className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold shrink-0"
+                          style={{
+                            background: 'linear-gradient(135deg, var(--accent-blue), var(--accent-purple))',
+                            color: '#fff',
+                          }}
+                        >
+                          {testimonial.avatar || testimonial.name?.charAt(0)}
+                        </div>
+                        <div>
+                          <p className="font-bold text-sm" style={{ color: 'var(--text-primary)' }}>
+                            {testimonial.name}
+                          </p>
+                          <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
+                            {testimonial.college} {testimonial.domain ? `• ${testimonial.domain}` : ''}
+                          </p>
+                        </div>
+                      </div>
+                      <StarRating rating={testimonial.rating || 5} />
+                    </div>
+                    <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+                      {testimonial.text}
+                    </p>
+                    {(testimonial.date || testimonial.timestamp) && (
+                      <p className="text-xs mt-3 text-right opacity-70" style={{ color: 'var(--text-muted)' }}>
+                        {new Date(testimonial.date || testimonial.timestamp).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </div>
             </motion.div>
           </motion.div>
         )}
