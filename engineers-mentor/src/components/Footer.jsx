@@ -34,7 +34,7 @@ export default function Footer() {
               From concept to delivery, we help you stand out.
             </p>
             {/* Social icons */}
-            <div className="flex gap-3">
+            {/* <div className="flex gap-3">
               {['Instagram', 'LinkedIn', 'Twitter', 'YouTube'].map((name) => (
                 <div
                   key={name}
@@ -48,7 +48,7 @@ export default function Footer() {
                   {name[0]}
                 </div>
               ))}
-            </div>
+            </div> */}
           </div>
 
           {/* Quick Links */}

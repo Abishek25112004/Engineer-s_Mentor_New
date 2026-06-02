@@ -131,8 +131,8 @@ export default function About() {
           <div className="absolute inset-0 grid-bg-dense opacity-30" />
           <div className="relative z-10">
             <p className="text-lg md:text-xl font-medium leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-              We&apos;ve helped <span className="text-gradient font-bold">500+ students</span> across{' '}
-              <span className="text-gradient font-bold">50+ colleges</span> deliver outstanding final year projects
+              We&apos;ve helped <span className="text-gradient font-bold">100+ students</span> across{' '}
+              <span className="text-gradient font-bold">10+ colleges</span> deliver outstanding final year projects
               in <span className="text-gradient font-bold">13+ engineering domains</span>.
             </p>
           </div>
