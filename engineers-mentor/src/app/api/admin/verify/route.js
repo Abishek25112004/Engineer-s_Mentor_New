@@ -4,7 +4,7 @@ import { cookies } from 'next/headers';
 export async function POST(req) {
   try {
     const { otp } = await req.json();
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const expectedOtp = cookieStore.get('pending_admin_otp')?.value;
 
     if (!expectedOtp) {
