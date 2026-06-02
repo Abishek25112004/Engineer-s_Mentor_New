@@ -4,6 +4,15 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { googleSheetsUrl } from '@/lib/emailService';
 
+function getValidImageUrl(url) {
+  if (!url) return null;
+  const gDriveMatch = url.match(/\/file\/d\/(.+?)\//) || url.match(/\?id=(.+?)(&|$)/);
+  if (gDriveMatch && gDriveMatch[1]) {
+    return `https://drive.google.com/uc?export=view&id=${gDriveMatch[1]}`;
+  }
+  return url;
+}
+
 export default function AdminPage() {
   const [step, setStep] = useState('CHECKING'); // CHECKING, LOGIN, OTP, DASHBOARD
   const [email, setEmail] = useState('');
@@ -232,7 +241,7 @@ export default function AdminPage() {
                   ) : (
                     projects.map((project, idx) => (
                       <div key={idx} className="glass p-6 rounded-xl flex gap-4 items-center">
-                        <div className="w-16 h-16 rounded-lg flex-shrink-0" style={{ background: project.color, backgroundImage: `url(${project.image})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
+                        <div className="w-16 h-16 rounded-lg flex-shrink-0" style={{ background: project.color, backgroundImage: `url('${getValidImageUrl(project.image)}')`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
                         <div>
                           <h4 className="font-bold text-[var(--text-primary)]">{project.title}</h4>
                           <p className="text-sm text-[var(--text-muted)]">{project.domain}</p>

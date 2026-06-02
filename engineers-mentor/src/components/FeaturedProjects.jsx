@@ -4,6 +4,16 @@ import SectionHeading from './SectionHeading';
 import { projects as staticProjects } from '@/data/projects';
 import { fetchProjectsFromSheets } from '@/lib/emailService';
 
+function getValidImageUrl(url) {
+  if (!url) return null;
+  // Convert standard Google Drive viewing links to direct image links
+  const gDriveMatch = url.match(/\/file\/d\/(.+?)\//) || url.match(/\?id=(.+?)(&|$)/);
+  if (gDriveMatch && gDriveMatch[1]) {
+    return `https://drive.google.com/uc?export=view&id=${gDriveMatch[1]}`;
+  }
+  return url;
+}
+
 function ProjectCard({ project }) {
   return (
     <div
@@ -13,34 +23,32 @@ function ProjectCard({ project }) {
         border: '1px solid var(--glass-border)',
       }}
     >
-      {/* Image placeholder */}
+      {/* Image / Background */}
       <div className="relative h-52 md:h-60 overflow-hidden"
         style={{
-          background: `linear-gradient(135deg, ${project.color}20, ${project.color}05)`,
+          backgroundColor: project.color ? `${project.color}20` : '#1a1a2e',
+          backgroundImage: project.image ? `url('${getValidImageUrl(project.image)}')` : `linear-gradient(135deg, ${project.color}20, ${project.color}05)`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
         }}>
-        {/* Decorative elements */}
-        <div className="absolute inset-0 grid-bg-dense opacity-30" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-          <div
-            className="w-24 h-24 rounded-2xl rotate-12 transition-transform duration-500 group-hover:rotate-45 group-hover:scale-110"
-            style={{
-              background: `linear-gradient(135deg, ${project.color}30, ${project.color}10)`,
-              border: `1px solid ${project.color}30`,
-            }}
-          />
-        </div>
-        <div className="absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-medium"
-          style={{ background: `${project.color}20`, color: project.color, border: `1px solid ${project.color}30` }}>
+        {/* Decorative elements only show if no actual image is provided */}
+        {!project.image && (
+          <>
+            <div className="absolute inset-0 grid-bg-dense opacity-30" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+              <div
+                className="w-24 h-24 rounded-2xl rotate-12 transition-transform duration-500 group-hover:rotate-45 group-hover:scale-110"
+                style={{
+                  background: `linear-gradient(135deg, ${project.color}30, ${project.color}10)`,
+                  border: `1px solid ${project.color}30`,
+                }}
+              />
+            </div>
+          </>
+        )}
+        <div className="absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-medium z-10"
+          style={{ background: 'rgba(0,0,0,0.5)', color: project.color || '#fff', border: `1px solid ${project.color}30`, backdropFilter: 'blur(4px)' }}>
           {project.domain}
-        </div>
-
-        {/* Overlay on hover */}
-        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-          style={{ background: `${project.color}10`, backdropFilter: 'blur(4px)' }}>
-          <span className="text-sm font-medium px-6 py-2 rounded-full"
-            style={{ background: `${project.color}30`, color: '#fff', border: `1px solid ${project.color}50` }}>
-            View Details
-          </span>
         </div>
       </div>
 
