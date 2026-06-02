@@ -240,6 +240,7 @@ export default function Contact() {
                         {domains.map((d) => (
                           <option key={d.id} value={d.title}>{d.title}</option>
                         ))}
+                        <option value="Others">Others</option>
                       </select>
                       {errors.domain && <p className="text-xs mt-1 text-red-400">{errors.domain}</p>}
                     </div>
@@ -305,7 +306,9 @@ export default function Contact() {
                   </svg>
                 </div>
                 <div>
-                  <p className="text-xs uppercase tracking-wider mb-1" style={{ color: 'var(--text-muted)' }}>Email</p>
+                  <p className="text-xs uppercase tracking-wider mb-1 flex items-center gap-2" style={{ color: 'var(--text-muted)' }}>
+                    Email <span className="text-[10px] normal-case bg-[var(--accent-blue)]/10 px-2 py-0.5 rounded-full" style={{ color: 'var(--accent-blue)' }}>Tap to send email</span>
+                  </p>
                   <p className="text-sm font-medium break-all" style={{ color: 'var(--text-secondary)' }}>
                     engineersmentorservices@gmail.com
                   </p>
@@ -321,7 +324,9 @@ export default function Contact() {
                   </svg>
                 </div>
                 <div>
-                  <p className="text-xs uppercase tracking-wider mb-1" style={{ color: 'var(--text-muted)' }}>Phone</p>
+                  <p className="text-xs uppercase tracking-wider mb-1 flex items-center gap-2" style={{ color: 'var(--text-muted)' }}>
+                    Phone <span className="text-[10px] normal-case bg-[var(--accent-purple)]/10 px-2 py-0.5 rounded-full" style={{ color: 'var(--accent-purple)' }}>Tap to call</span>
+                  </p>
                   <p className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>
                     +91 8072287692<br />+91 9080420738
                   </p>
