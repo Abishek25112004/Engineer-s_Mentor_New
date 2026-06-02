@@ -3,6 +3,7 @@ import { useRef, useEffect, useState } from 'react';
 import SectionHeading from './SectionHeading';
 import { projects as staticProjects } from '@/data/projects';
 import { fetchProjectsFromSheets } from '@/lib/emailService';
+import { motion, AnimatePresence } from 'framer-motion';
 
 function getValidImageUrl(url) {
   if (!url) return null;
@@ -89,6 +90,8 @@ export default function FeaturedProjects() {
   const scrollContainerRef = useRef(null);
   const [projects, setProjects] = useState(staticProjects);
 
+  const [showAll, setShowAll] = useState(false);
+
   useEffect(() => {
     const loadProjects = async () => {
       const response = await fetchProjectsFromSheets();
@@ -99,46 +102,23 @@ export default function FeaturedProjects() {
     loadProjects();
   }, []);
 
+  // Horizontal scroll on mouse wheel over the container
   useEffect(() => {
-    let ctx;
-    let isCancelled = false;
-
-    const init = async () => {
-      const gsapModule = await import('gsap');
-      const { ScrollTrigger } = await import('gsap/ScrollTrigger');
-      const gsap = gsapModule.default;
-      gsap.registerPlugin(ScrollTrigger);
-
-      if (isCancelled) return;
-
-      const container = scrollContainerRef.current;
-      if (!container) return;
-
-      const scrollWidth = container.scrollWidth - container.clientWidth;
-
-      ctx = gsap.context(() => {
-        gsap.to(container, {
-          scrollLeft: scrollWidth,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top 20%',
-            end: `+=${scrollWidth}`,
-            scrub: 1,
-            pin: true,
-            anticipatePin: 1,
-          },
-        });
-      });
+    const container = scrollContainerRef.current;
+    if (!container) return;
+    
+    const onWheel = (e) => {
+      if (e.deltaY !== 0) {
+        e.preventDefault();
+        container.scrollLeft += e.deltaY;
+      }
     };
-
-    init();
-
-    return () => {
-      isCancelled = true;
-      if (ctx) ctx.revert();
-    };
+    
+    container.addEventListener('wheel', onWheel, { passive: false });
+    return () => container.removeEventListener('wheel', onWheel);
   }, []);
+
+  const displayProjects = projects.slice(0, 6);
 
   return (
     <section id="projects" ref={sectionRef} className="section-padding relative overflow-hidden" style={{ background: 'var(--bg-primary)', zIndex: 10 }}>
@@ -150,21 +130,66 @@ export default function FeaturedProjects() {
       </div>
 
       {/* Horizontal scroll container */}
-      <div
-        ref={scrollContainerRef}
-        className="flex gap-10 px-8 md:px-12 overflow-x-auto pb-8 scrollbar-hide"
-        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-      >
-        {projects.map((project, idx) => (
-          <ProjectCard key={project.id || idx} project={project} />
-        ))}
+      <div className="relative group">
+        <div
+          ref={scrollContainerRef}
+          className="flex gap-10 px-8 md:px-12 overflow-x-auto pb-8 scrollbar-hide cursor-grab active:cursor-grabbing"
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        >
+          {displayProjects.map((project, idx) => (
+            <ProjectCard key={project.id || idx} project={project} />
+          ))}
+        </div>
+        
+        {/* Gradient edges */}
+        <div className="absolute top-0 left-0 bottom-8 w-20 z-10 pointer-events-none"
+          style={{ background: 'linear-gradient(90deg, var(--bg-primary), transparent)' }} />
+        <div className="absolute top-0 right-0 bottom-8 w-20 z-10 pointer-events-none"
+          style={{ background: 'linear-gradient(270deg, var(--bg-primary), transparent)' }} />
       </div>
 
-      {/* Gradient edges */}
-      <div className="absolute top-0 left-0 bottom-0 w-20 z-10 pointer-events-none"
-        style={{ background: 'linear-gradient(90deg, var(--bg-primary), transparent)' }} />
-      <div className="absolute top-0 right-0 bottom-0 w-20 z-10 pointer-events-none"
-        style={{ background: 'linear-gradient(270deg, var(--bg-primary), transparent)' }} />
+      {projects.length > 6 && (
+        <div className="flex justify-center mt-12 relative z-20">
+          <button 
+            onClick={() => setShowAll(true)}
+            className="btn-primary"
+          >
+            View All Projects ({projects.length})
+          </button>
+        </div>
+      )}
+
+      {/* View All Modal */}
+      <AnimatePresence>
+        {showAll && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8"
+            style={{ background: 'rgba(10, 10, 15, 0.95)', backdropFilter: 'blur(10px)' }}
+          >
+            <div className="w-full max-w-7xl max-h-full flex flex-col glass rounded-3xl overflow-hidden border border-white/10">
+              <div className="p-6 md:p-8 border-b border-white/10 flex justify-between items-center sticky top-0 bg-[var(--bg-primary)]/80 backdrop-blur-xl z-10">
+                <h3 className="text-2xl md:text-3xl font-bold text-gradient">All Projects</h3>
+                <button 
+                  onClick={() => setShowAll(false)}
+                  className="w-10 h-10 rounded-full flex items-center justify-center bg-white/5 hover:bg-white/10 transition-colors"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+              </div>
+              <div className="p-6 md:p-8 overflow-y-auto custom-scrollbar flex-1">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 place-items-center">
+                  {projects.map((project, idx) => (
+                    <ProjectCard key={project.id || idx} project={project} />
+                  ))}
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }
