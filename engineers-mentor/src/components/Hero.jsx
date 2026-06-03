@@ -73,7 +73,10 @@ export default function Hero() {
 
   const scrollTo = (href) => {
     const el = document.querySelector(href);
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+      window.history.pushState(null, null, href);
+    }
   };
 
   return (

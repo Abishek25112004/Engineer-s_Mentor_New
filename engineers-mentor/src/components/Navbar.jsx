@@ -29,6 +29,7 @@ export default function Navbar() {
     const el = document.querySelector(href);
     if (el) {
       el.scrollIntoView({ behavior: 'smooth' });
+      window.history.pushState(null, null, href);
     }
   };
 

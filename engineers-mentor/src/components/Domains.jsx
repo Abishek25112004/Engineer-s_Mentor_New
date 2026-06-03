@@ -36,7 +36,10 @@ function DomainCard({ domain, index }) {
 
   const scrollToContact = () => {
     const el = document.querySelector('#contact');
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+      window.history.pushState(null, null, '#contact');
+    }
   };
 
   return (
